@@ -368,30 +368,7 @@ RETURN EXACTLY THIS JSON STRUCTURE:
           1800
         );
 
-        let parsed: any;
-
-        try {
-          parsed = parseJSONLoose(text);
-        } catch {
-          parsed = null;
-        }
-
-        /*
-         * Accept both:
-         *
-         * { decisions: [...] }
-         *
-         * and the older:
-         *
-         * [...]
-         *
-         * format.
-         */
-        const decisions = Array.isArray(parsed)
-          ? parsed
-          : Array.isArray(parsed?.decisions)
-            ? parsed.decisions
-            : [];
+        const decisions = normalizeScreeningResults(text, batchIds);
 
         if (decisions.length === 0) {
           throw new Error(
